@@ -5,11 +5,11 @@
 
 
 typedef enum {
-  EQUALS, ADD, SUBSTRACT, NUMBER, WORD, PREV, MULTIPLY, EXIT
+  EQUALS, ADD, SUBSTRACT, NUMBER, WORD, PREV, MULTIPLY, EXIT, DIVIDE
 } TokenType;
 
 TokenType getNextToken(char tk[], int len);
-float followToken(float a, float b,char *en);
+float followToken(float a, float b,TokenType token);
 char * lineCalc(void);
 static float prevResult;
 
@@ -19,32 +19,65 @@ main(){
   while(1){
 
     char *solution = lineCalc();
-    printf("\n\n\nSolution: %s\n",solution );
+    printf("\n\nSolution: %s\n",solution );
 }
   return 0;
 }
 
-float followToken(float a, float b ,char *en){
-  switch (getNextToken(en, 20)) {
-    case ADD:
-    a = a + b;
-    break;
 
-    case SUBSTRACT:
-    a = a - b;
-    break;
+char * lineCalc(void){
+  static char result2Return[20];
+  float number[] = {0, 0};
+  TokenType operation;
+  TokenType sequel;
+  char line[60];
+  char *tmp;
+  fgets(line, 100, stdin);
+  char separator[] = " ,";
+  for(tmp = strtok(line, separator); tmp; tmp = strtok(NULL, separator)){
+    switch (getNextToken(tmp, sizeof(tmp))) {
 
-    case EQUALS:
-    break;
-
-    case MULTIPLY:
-    a = a * b;
-    break;
+      case NUMBER:
+        if(number[0] == 0){
+          number[0] = atof(tmp);
+        } else number[1] = atof(tmp);
+        break;
+      case ADD:
+        operation = ADD;
+        break;
+      case SUBSTRACT :
+        operation = SUBSTRACT;
+        break;
+      case MULTIPLY:
+        operation = MULTIPLY;
+        break;
+      case DIVIDE:
+        operation = DIVIDE;
+      break;
+      case EQUALS:
+        sequel = EQUALS;
+      break;
+      case PREV:
+        if(number[0] == 0){
+          number[0] = prevResult;
+        } else number[1] = prevResult;
+      break;
+    }
+    if(number[0] != 0 && number[1] != 0){
+      number[0] = followToken(number[0], number[1], operation);
+      number[1] = 0;
+    }
   }
-  return a;
+
+    number[0] = followToken(number[0],number[1], sequel);
+    prevResult = number[0];
+    sprintf(result2Return, "%4.2f", number[0]);
+    return result2Return;
+
 }
 
 TokenType getNextToken(char tk[], int len){
+
 
   if(isdigit(tk[0]) != 0){
     return NUMBER;
@@ -52,6 +85,9 @@ TokenType getNextToken(char tk[], int len){
 
   if (!(stricmp("MULTIPLY", tk)) || tk[0] == '*') {
     return MULTIPLY;
+
+  } else if (!(stricmp("divide", tk)) || tk[0] == '/' || !(stricmp("over", tk)) ) {
+    return DIVIDE;
 
   } else if (!(stricmp("ADD", tk)) || tk[0] == '+' || !(stricmp("PLUS", tk))) {
     return ADD;
@@ -72,47 +108,27 @@ TokenType getNextToken(char tk[], int len){
   return WORD;
 }
 
-char * lineCalc(void){
-  static char result2Return[20];
-  float value;
-  float a = 0;
-  float b = 0;
-  char *token1 = (char*) malloc  (sizeof(char)*10);
-  char *token2 = (char*) malloc  (sizeof(char)*10);
-  char line[60];
-  char *schowek;
-  fgets(line, 100, stdin);
-  char separator[] = " ,";
-  for(schowek = strtok(line, separator); schowek; schowek = strtok(NULL, separator)){
-    switch (getNextToken(schowek, sizeof(schowek)/sizeof(TokenType))) {
 
-      case NUMBER:
-      if(a == 0){
-        a = atof(schowek);
-      } else b = atof(schowek);
-      break;
-      case ADD: case SUBSTRACT : case MULTIPLY:
-      token1 = schowek;
-      break;
+float followToken(float a, float b ,TokenType token){
+  switch (token) {
+    case ADD:
+    a = a + b;
+    break;
 
-      case EQUALS:
-      token2 = schowek;
-      break;
-      case PREV:
-      if(a == 0){
-        a = prevResult;
-      } else b = prevResult;
-      break;
-    }
-    if(a != 0 && b != 0){
-      a = followToken(a,b, token1);
-      b = 0;
-    }
+    case SUBSTRACT:
+    a = a - b;
+    break;
+
+    case EQUALS:
+    break;
+
+    case MULTIPLY:
+    a = a * b;
+    break;
+
+    case DIVIDE:
+    a = a / b;
+    break;
   }
-
-    value = followToken(a,b, token2);
-    prevResult = value;
-    sprintf(result2Return, "%4.2f", value);
-    return result2Return;
-
+  return a;
 }
