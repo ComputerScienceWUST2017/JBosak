@@ -8,7 +8,7 @@ void readingChars(int *chars);
 
 int
 main(int argc, char *argv[]){
-  counter(argv[1][1]);
+  counterChars(argv[1][1]);// L or M
   return 0;
 }
 
