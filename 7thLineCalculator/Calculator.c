@@ -76,6 +76,7 @@ char * lineCalc(void){
   static char result2Return[20];
   float value;
   float a = 0;
+  float b = 0;
   char *token1 = (char*) malloc  (sizeof(char)*10);
   char *token2 = (char*) malloc  (sizeof(char)*10);
   char line[60];
