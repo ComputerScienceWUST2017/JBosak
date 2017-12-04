@@ -16,52 +16,52 @@ static float prevResult;
 int
 main(){
   prevResult = 0;
-  while(1){
-
-    char *solution = lineCalc();
-    printf("\n\nSolution: %s\n",solution );
+  char *solution;
+  while(solution != EOF){
+     char* solution = lineCalc();
+     printf("Solution: %s\n\n",solution );
 }
   return 0;
 }
 
 
 char * lineCalc(void){
-  static char result2Return[20];
   float number[] = {0, 0};
   TokenType operation;
   TokenType sequel;
-  char line[60];
+  char line[100];
+  char linia[100];
   char *tmp;
-  fgets(line, 100, stdin);
+  if(fgets(line, 100, stdin) == NULL){
+    exit(0);
+    return EOF;
+  } else {
+    memcpy(linia, line, strlen(line) + 1);
+  }
+
   char separator[] = " ,";
   for(tmp = strtok(line, separator); tmp; tmp = strtok(NULL, separator)){
-    switch (getNextToken(tmp, sizeof(tmp))) {
+    TokenType res;
+    switch (res = getNextToken(tmp, sizeof(tmp))) {
 
       case NUMBER:
         if(number[0] == 0){
           number[0] = atof(tmp);
         } else number[1] = atof(tmp);
         break;
-      case ADD:
-        operation = ADD;
+      case ADD: case SUBSTRACT: case MULTIPLY: case DIVIDE:
+        operation = res;
         break;
-      case SUBSTRACT :
-        operation = SUBSTRACT;
-        break;
-      case MULTIPLY:
-        operation = MULTIPLY;
-        break;
-      case DIVIDE:
-        operation = DIVIDE;
-      break;
+
       case EQUALS:
-        sequel = EQUALS;
-      break;
+        sequel = res;
+        break;
+
       case PREV:
         if(number[0] == 0){
           number[0] = prevResult;
         } else number[1] = prevResult;
-      break;
+        break;
     }
     if(number[0] != 0 && number[1] != 0){
       number[0] = followToken(number[0], number[1], operation);
@@ -71,7 +71,10 @@ char * lineCalc(void){
 
     number[0] = followToken(number[0],number[1], sequel);
     prevResult = number[0];
+
+    static char result2Return[20];
     sprintf(result2Return, "%4.2f", number[0]);
+    printf("%s",linia );
     return result2Return;
 
 }
@@ -86,7 +89,7 @@ TokenType getNextToken(char tk[], int len){
   if (!(stricmp("MULTIPLY", tk)) || tk[0] == '*') {
     return MULTIPLY;
 
-  } else if (!(stricmp("divide", tk)) || tk[0] == '/' || !(stricmp("over", tk)) ) {
+  } else if (!(stricmp("DIVIDE", tk)) || tk[0] == '/' || !(stricmp("OVER", tk)) ) {
     return DIVIDE;
 
   } else if (!(stricmp("ADD", tk)) || tk[0] == '+' || !(stricmp("PLUS", tk))) {
@@ -95,7 +98,7 @@ TokenType getNextToken(char tk[], int len){
   } else if (!(stricmp("EQUALS\n", tk)) || tk[0] == '=') {
     return EQUALS;
 
-  } else if (!(stricmp("substract", tk)) || tk[0] == '-' || !(stricmp("MINUS", tk))) {
+  } else if (!(stricmp("SUBSTRACT", tk)) || tk[0] == '-' || !(stricmp("MINUS", tk))) {
     return SUBSTRACT;
 
   } else if (!stricmp("PREV", tk) || !(stricmp("“PREV_RESULT", tk))) {
