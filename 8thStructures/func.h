@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "func.h"
 
 typedef struct {
@@ -17,6 +18,7 @@ int readData(personalData *ar, int len);
 int getOldestPersen(personalData data[], int len);
 int getSlimmestPersen(personalData data[], int len);
 void printInfo(personalData ar[], int idx, char *msgOk, char * msgbad);
+int semicolonCounter(char *line);
 
 
 #endif

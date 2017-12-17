@@ -33,9 +33,12 @@ int readData(personalData ar[], int len){
   int i = 0;
 
   while(fgets(line, 100, stdin) != NULL){
-    if(i<len-1){
-      char *ptr = line;
+    char *ptr = line;
+    if((i<len-1) && (semicolonCounter(ptr) == 4)){
       ar[i++] = getPersonDesc(ptr);
+      if(ar[i-1].remarks == '\0'){
+        i--;
+      }
     }
   }
   personalData x;
@@ -44,20 +47,47 @@ int readData(personalData ar[], int len){
   return i;
 }
 
+int semicolonCounter(char *line){
+  int counter = 0;
+
+  unsigned int j;
+  for(j = 0;j < strlen(line)-1; j++){
+    if(line[j] == ';'){
+      counter++;
+    }
+  }
+  return counter;
+}
+
 personalData getPersonDesc(char * line){
   char *data;
   personalData x;
-  data = strtok (line,";");
+
+  data = strtok (line,";");//name
   snprintf(x.name, 20, "%s", data);
-  data = strtok(NULL, ";");
+
+  data = strtok(NULL, ";");//age
+  if(atoi(data) == 0){
+    x.remarks = '\0';
+    return x;
+  }
   x.age = atoi(data);
-  data = strtok(NULL, ";");
+
+  data = strtok(NULL, ";");//weight
+  printf("%f\n",atof(data) );
+  if(atof(data) == 0){
+    x.remarks = '\0';
+    return x;
+  }
   x.weight = atof(data);
-  data = strtok (NULL,";");
+
+  data = strtok (NULL,";");//remark
   x.remarks = malloc(sizeof(char)*50);
   snprintf(x.remarks, 50, "%s", data);
+
   return x;
 }
+
 
 void printInfo(personalData ar[], int idx, char *msgOk, char * msgbad){
   if(idx<0){

@@ -13,6 +13,5 @@ main(){
   idx = getSlimmestPersen(data, len);
   printInfo(data, idx, "slimmest person", msgBad);
   printInfo(data, len-1, "last person", msgBad);
-  puts("\nEnd of work!");
   return 0;
 }
