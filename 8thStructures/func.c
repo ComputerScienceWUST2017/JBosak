@@ -74,7 +74,6 @@ personalData getPersonDesc(char * line){
   x.age = atoi(data);
 
   data = strtok(NULL, ";");//weight
-  printf("%f\n",atof(data) );
   if(atof(data) == 0){
     x.remarks = '\0';
     return x;
