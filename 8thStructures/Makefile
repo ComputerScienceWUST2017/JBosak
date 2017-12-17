@@ -6,6 +6,7 @@ build: $(OBJECTS)
 	gcc $(CFLAGS) $(NAME) $(OBJECTS)
 	rm -f *.o
 
+
 main.o: main.c
 	gcc -c $(CFLAGS) main.o main.c
 
