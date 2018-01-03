@@ -1,4 +1,5 @@
-#include "func.h"
+#include "personalData.h"
+#include "sortTools.h"
 
 
 int
@@ -15,7 +16,7 @@ main(){
   puts("after remarks sort");
   printAllData(data,len);
 
-  puts("index 2:");
+  puts("\nindex 2:");
   printData(data[2],len);
   puts("\n End of work!");
 

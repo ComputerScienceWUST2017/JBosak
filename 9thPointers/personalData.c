@@ -1,4 +1,5 @@
-#include "func.h"
+#include "personalData.h"
+
 
 int readPtrData(struct personalData *ar[], int len){
   char line[100];
@@ -66,51 +67,4 @@ int semicolonCounter(char *line){
     }
   }
   return counter;
-}
-
-void weightSort(struct personalData *data[], int len){
-  qsort(data,len,sizeof(*data),cmpWeight);
-}
-int cmpWeight (const void *a, const void *b) {
-  struct personalData *pd0 = *((struct personalData **)a);
-  struct personalData *pd1 = *((struct personalData **)b);
-
-  return (pd0->weight - pd1->weight);
-}
-
-void remarkstSort(struct personalData *data[], int len){
-  qsort(data,len,sizeof(*data),cmpRemarks);
-}
-int cmpRemarks (const void *a, const void *b) {
-  struct personalData *pd0 = *((struct personalData **)a);
-  struct personalData *pd1 = *((struct personalData **)b);
-
-  return (strcmp(pd0->remarks, pd1->remarks));
-}
-
-void printAllData(struct personalData *data[], int len){
-  int i;
-  for(i = 0;i < len; i++){
-    printPtrData(&data[i], len);
-  }
-}
-
-void printData (struct personalData data[], int len){
-  if(len < 0){
-    puts("It is not working");
-  }else{
-    int index = 0;
-  //  puts("It is working");
-    printf("name: %s\tage: %d\tweight: %.2f\tremark:%s\n"
-            ,data[index].name, data[index].age, data[index].weight, data[index].remarks);
-  }
-}
-void printPtrData(struct personalData *data[], int len){
-  if(len < 0){
-    puts("It is not working");
-  }else{
-  //  puts("It is working");
-    printf("name: %s\tage: %d\tweight: %.2f\tremark:%s\n"
-            ,data[0]->name, data[0]->age, data[0]->weight, data[0]->remarks);
-  }
 }
