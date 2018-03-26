@@ -5,7 +5,6 @@ else
   echo "------COMPILING FILE $1"
   g++ $1 -Wall -Wextra -o a.out
 fi
-
 if [ -e "a.out" ]; then
   if [ ! -e tests/myOutput ]; then
     mkdir tests/myOutput
