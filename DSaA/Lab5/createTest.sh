@@ -16,7 +16,6 @@ fi
 if [ ! $# -eq 0 ]; then
   g++ $1 -Wall -Wextra -o a.out
 fi
-
 for i in `seq 1 $2`;
 do
   ./createTest.out > tests/inputs/i$i.txt

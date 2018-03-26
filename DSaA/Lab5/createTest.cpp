@@ -7,7 +7,6 @@ int randInt(int max){
     return rand()%(max+1);
 }
 void writeCommendToFile(int num, int x){
-
     switch(num){
         case 0:
         {
@@ -25,7 +24,6 @@ void writeCommendToFile(int num, int x){
             return;
         }
     }
-
 }
 void generateNumbers(int x){
   for(int i = x;i!=0;i--){
