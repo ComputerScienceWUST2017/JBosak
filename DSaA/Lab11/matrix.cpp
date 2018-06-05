@@ -18,6 +18,46 @@ struct Graph{
   int queueSize;
   int size;
 };
+int minDistance(Graph &g, bool isIncluded[]){
+  int min = INFINITY;
+  int minIndex = 0;
+  for(int i = 0;i<g.size;i++){
+    if(!isIncluded[i] && g.queue[i]<=min){
+      min = g.queue[i];
+      minIndex = i;
+    }
+  }
+  return minIndex;
+}
+
+void singleSourceShortestPath(Graph &g,int value){
+  bool isIncluded[g.size];
+  for(int i = 0;i<g.size;i++){
+    g.queue[g.queueSize++] = INFINITY;
+    isIncluded[i]= false;
+  }
+
+  g.queue[value] = 0;
+  for(int i = 0;i<g.size;i++){
+    for(int c = 0;c<g.size-1;c++){
+
+
+      int u = minDistance(g,isIncluded);
+      isIncluded[u] = true;
+      for(int j = 0;j<g.size;j++){
+        if(!isIncluded[j] &&
+          g.matrix[u][j]!= INFINITY &&
+          g.queue[u]!= INFINITY &&
+          g.queue[u]+g.matrix[u][j] < g.queue[j]){
+            g.queue[j] =g.queue[u] +  g.matrix[u][j];
+          }
+    }
+  }
+  cout<<i<<"("<<g.queue[i]<<")"<<"\n";
+
+  }
+
+}
 
 int dequeue(Graph &g){
   int ret = -1;
@@ -31,6 +71,16 @@ int dequeue(Graph &g){
 
   return ret;
 }
+void dfsIterative(Graph &g, int value){
+  int x = 0;
+  g.queue[g.queueSize++] = value;
+  while(g.queueSize != 0){
+    x = dequeue(g);
+
+  }
+
+}
+
 void bfsVisit(Graph &g, int value){
   for(int i = 0;i<g.size;i++){
     if(g.matrix[value][i] != 0 && g.matrix[value][i] != INFINITY){
@@ -235,6 +285,12 @@ int main(){
       depthFirstSearch(graph[currentT],value);
       continue;
     }
+    if(isCommand(command,"SS"))
+    {
+      singleSourceShortestPath(graph[currentT],value);
+      continue;
+    }
+
 		if(isCommand(command,"LG"))
 		{
 			int m;
